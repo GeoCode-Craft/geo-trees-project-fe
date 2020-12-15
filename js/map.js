@@ -36,6 +36,6 @@ var TreeCadSource = new ol.source.Vector({
     target: 'map',
     view: new ol.View({
         center: ol.proj.transform([7.62869,51.9629],'EPSG:4326','EPSG:3857'),
-        zoom: 12,
+        zoom: 15,
     }),
   });
