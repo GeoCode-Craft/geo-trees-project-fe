@@ -2,3 +2,9 @@
     width: 100%;
     height: 100%;
 }
+
+#location{
+    position:absolute;
+    top: 160px;
+    left: 255px;
+}
