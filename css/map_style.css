@@ -8,3 +8,10 @@
     top: 160px;
     left: 255px;
 }
+
+#gps{
+
+    position:absolute;
+    top:200px;
+    left:250px;
+}
