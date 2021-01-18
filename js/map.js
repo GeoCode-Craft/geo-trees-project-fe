@@ -1,3 +1,7 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 var TreeCadSource = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: function (extent) {
@@ -61,6 +65,7 @@ var TreeCadSource = new ol.source.Vector({
       return style;
     },
     //style: iconStyle
+    name: 'Trees'
   });
 
   /* Map View and zoom changed */
@@ -86,7 +91,7 @@ var TreeCadSource = new ol.source.Vector({
 
  /*popup*/
   var select = new ol.interaction.Select({
-    hitTolerance: 5,
+    hitTolerance: 10,
     multi: true,
     condition: ol.events.condition.singleClick
   });
@@ -97,41 +102,15 @@ var TreeCadSource = new ol.source.Vector({
     select: select,
     canFix: true,
     template: {
-        
-        title: 'Title',
+        title: 'Feature Information',
         attributes: // [ 'baumgruppe', 'str_schl' ]
         {  
-          'str_schl': { title: 'Straßenschlüssel' },
-          'baumgruppe': { title: 'Species' },
-         
-         
-          
-          
-          
-          
-          /* Using localString with a date * /
-          'date': { 
-            title: 'Date', 
-            format: ol.Overlay.PopupFeature.localString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) 
-          }
-          /**/
+          "str_schl": { title: 'Straßenschlüssel' },
+          "baumgruppe": { title: 'Species' },
         }
     }
   });
   map.addOverlay (popup);
-
-
-/*
-  var popup = new ol.Overlay.Popup();
-  map.addOverlay(popup);
-  
-  map.on('click', function(evt) {
-      var prettyCoord = ol.TreeCad.toStringHDMS(ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'), 2);
-      popup.show(evt.coordinate, '<div><h2>Coordinates</h2><p>' + prettyCoord + '</p></div>');
-  });
-  */
-
-
 
     
 
