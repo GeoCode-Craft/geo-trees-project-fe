@@ -12,6 +12,7 @@ function getLocation() {
 }
 
 function showPosition(position) {
+  
     x.innerHTML = "Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude;
 
@@ -66,9 +67,11 @@ function showPosition(position) {
     }));
 
     if(document.getElementById("demo").style.display == 'block'){
-      document.getElementById("demo").style.display = 'none';
+      x.style.display = 'none';
+      document.getElementById("gps").style.backgroundColor = '#4e73df';
     }else{
-      document.getElementById("demo").style.display = 'block';
+      x.style.display = 'block';
+      document.getElementById("gps").style.backgroundColor = '#206826';
     }
 
     new ol.layer.Vector({
@@ -77,6 +80,16 @@ function showPosition(position) {
         features: [positionFeature],
       }),
     });
+}
+
+function ControlLayer(){
+  if(document.getElementById("panelLayers").style.display == 'block'){
+    document.getElementById("panelLayers").style.display = 'none';
+    document.getElementById("controlLayer").style.backgroundColor = '#4e73df';
+  }else{
+    document.getElementById("panelLayers").style.display = 'block';
+    document.getElementById("controlLayer").style.backgroundColor = '#206826';
+  }
 }
   
 

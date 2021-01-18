@@ -176,15 +176,30 @@
                 <div class="container-fluid" style="width:100%; height:100%; padding: 0%; margin: 0%;">
                     <!-- Page Heading -->
                     <div id="map" class="map"></div>
-                   
-                  
-                  
 
+                    <!--Location Button Created-->
                     <a id="gps" onclick="getLocation()" class="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Your coordinates" type="button">
-                        <i class="fas fa-map-marker"></i>
+                        <i class="fas fa-location-arrow"></i>
                         <p id="demo" style="display: none;"></p>
-                    </a>         
+                    </a>   
 
+                    <!--Control Layer Button-->
+                    <a id="controlLayer" onclick="ControlLayer()" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title="Control Layer" type="button">
+                        <i class="fas fa-layer-group"></i>
+                    </a>   
+
+                    <div id="panelLayers" class="col-xl-2 col-lg-5">
+                        <div class="card shadow mb-0">
+                            <!-- Card Header - Dropdown -->
+                            <div
+                                class="card-header py-3 align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Layers</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
 

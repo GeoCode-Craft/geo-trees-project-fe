@@ -10,8 +10,19 @@
 }
 
 #gps{
-
     position:absolute;
-    top:7em;
-    right:3%;
+    bottom:1em;
+    left:250px;
+}
+#controlLayer{
+    position:absolute;
+    top:6em;
+    right:2.5%
+}
+
+#panelLayers{
+    position: absolute;
+    top: 9em;
+    right: 2%;
+    display: none;
 }
