@@ -2,15 +2,22 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+var controllayer = [
+  {name:"Tree", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'},
+  {name:"Watered Trees", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'},
+  {name:"Fruit Trees", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'},
+  {name:"Oak processionary moth", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'}
+]
+
 var TreeCadSource = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: function (extent) {
       return (
-        'https://www.stadt-muenster.de/ows/mapserv706/odgruenserv?REQUEST=GetFeature&SERVICE=WFS&VERSION=2.0.0&'+
-        'srsname=EPSG:3857&TYPENAME=ms:Baeume&outputFormat=GEOJSON&' +
+        'http://giv-project15.uni-muenster.de:8080/geoserver/ifgi/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=ifgi%3Atrees_data&outputFormat=application%2Fjson' +
+        '&srsname=EPSG:4326&' +
         'bbox=' +
         extent.join(',') +
-        ',EPSG::3857'
+        ',EPSG:3857'
       );
     },
     strategy: ol.loadingstrategy.bbox,
@@ -29,9 +36,7 @@ var TreeCadSource = new ol.source.Vector({
   var clusterSource = new ol.source.Cluster({
     distance: 20,
     source: TreeCadSource,
-  });
-
-  
+  });  
 
   var TreeCad = new ol.layer.Vector({
     source: clusterSource,
@@ -87,31 +92,35 @@ var TreeCadSource = new ol.source.Vector({
 
   map.addLayer(TreeCad);
 
- 
+//  /*popup*/
+//   var select = new ol.interaction.Select({
+//     hitTolerance: 10,
+//     multi: true,
+//     condition: ol.events.condition.singleClick
+//   });
+//   map.addInteraction(select);
 
- /*popup*/
-  var select = new ol.interaction.Select({
-    hitTolerance: 10,
-    multi: true,
-    condition: ol.events.condition.singleClick
+//   var popup = new ol.Overlay.PopupFeature({
+//     popupClass: 'default anim',
+//     select: select,
+//     canFix: true,
+//     template: {
+//         title: 'Feature Information',
+//         attributes: // [ 'baumgruppe', 'str_schl' ]
+//         {  
+//           "str_schl": { title: 'Straßenschlüssel' },
+//           "baumgruppe": { title: 'Species' },
+//         }
+//     }
+//   });
+//   map.addOverlay (popup);
+
+map.on("singleclick", function (evt) {
+  this.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    var baum = feature.get("baumgruppe");
+    var str_schl = feature.get("str_schl");
+    console.log(feature);
   });
-  map.addInteraction(select);
-
-  var popup = new ol.Overlay.PopupFeature({
-    popupClass: 'default anim',
-    select: select,
-    canFix: true,
-    template: {
-        title: 'Feature Information',
-        attributes: // [ 'baumgruppe', 'str_schl' ]
-        {  
-          "str_schl": { title: 'Straßenschlüssel' },
-          "baumgruppe": { title: 'Species' },
-        }
-    }
-  });
-  map.addOverlay (popup);
-
-    
+});
 
 
