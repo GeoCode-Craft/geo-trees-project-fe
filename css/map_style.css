@@ -26,3 +26,10 @@
     right: 2%;
     display: none;
 }
+
+#modal_usr{
+    position: absolute;
+    top: 9em;
+    right: 50%;
+    display: none;
+}
