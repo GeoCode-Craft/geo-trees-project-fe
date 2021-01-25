@@ -146,14 +146,9 @@ map.on("singleclick", function (evt) {
             '<td>None</td>'+
         '</tr>'+
         '<tr>'+
-            '<td>n/a</td>'+
-            '<td>'+str_schl+'</td>'+
-            '<td>None</td>'+
-        '</tr>'+
-        '<tr>'+
             '<td>Watered:</td>'+
             '<td>'+watering+'</td>'+
-            '<td><a onclick=-"changestate()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-hand-holding-water"></i></span><span class="text">I am Watering</span></a></td>'+
+            '<td><a onclick="changestateWater()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-hand-holding-water"></i></span><span class="text">I am Watering</span></a></td>'+
         '</tr>'+
         '<tr>'+
             '<td>Last Watering</td>'+
@@ -163,12 +158,12 @@ map.on("singleclick", function (evt) {
         '<tr>'+
             '<td>Fruits</td>'+
             '<td>'+fruit+'</td>'+
-            '<td><a onclick=-"changestate()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-apple-alt"></i></span><span class="text">Change State</span></a></td>'+
+            '<td><a onclick="changestateFruit()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-apple-alt"></i></span><span class="text">Change State</span></a></td>'+
         '</tr>'+
         '<tr>'+
-            '<td>oak processionary moth</td>'+
+            '<td>Oak processionary moth</td>'+
             '<td>'+eichenprozessionsspinner+'</td>'+
-            '<td><a onclick=-"changestate()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-viruses"></i></span><span class="text">Change State</span></a></td>'+
+            '<td><a onclick="changestateVirus()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-viruses"></i></span><span class="text">Change State</span></a></td>'+
         '</tr>'+
     '</tbody>'+
     '</table>';
