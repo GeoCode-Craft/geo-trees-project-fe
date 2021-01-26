@@ -283,6 +283,120 @@ function ControlLayer(){
   }
 }
   
+function layerchange(event){
+  if(document.getElementById(event).checked == true){
+    console.log(controllayer)
+    for(var i=0; i < controllayer.length; i++){
+      if(controllayer[i].name == event){
+        var iconStyle = new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            src: controllayer[i].symbol,
+          }),
+        });
+        
+        var lay=controllayer[i].layer;
+        var cql=controllayer[i].cql_filter; 
+        if(event != 'Tree'){
+          var source = new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: function (extent) {
+              return (
+                'http://giv-project15.uni-muenster.de:8080/geoserver/ifgi/ows?service=WFS&version=1.0.0&request=GetFeature&typeName='+lay+'&outputFormat=application%2Fjson' +
+                '&srsname=EPSG:4326&cql_filter='+cql
+              );
+            },
+          });
+  
+          var layer = new ol.layer.Vector({
+            source: source,
+            style: iconStyle,
+            name: controllayer[i].name
+          });
+  
+          map.addLayer(layer);
+        }else{
+          var TreeCadSource = new ol.source.Vector({
+            format: new ol.format.GeoJSON(),
+            url: function (extent) {
+              return (
+                'http://giv-project15.uni-muenster.de:8080/geoserver/ifgi/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=ifgi%3Atrees_data&outputFormat=application%2Fjson' +
+                '&srsname=EPSG:4326&' +
+                'bbox=' +
+                extent.join(',') +
+                ',EPSG:3857'
+              );
+            },
+            strategy: ol.loadingstrategy.bbox,
+            name: 'Tree'
+        });
+        
+        var iconStyle = new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 46],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'pixels',
+              src: 'img/tree.png',
+            }),
+        });
+         
+          
+          var clusterSource = new ol.source.Cluster({
+            distance: 20,
+            source: TreeCadSource,
+          });  
+        
+          var TreeCad = new ol.layer.Vector({
+            source: clusterSource,
+            style: function (feature) {
+              var styleCache = {};
+              var size = feature.get('features').length;
+              var style = styleCache[size];
+              var zoom = map.getView().getZoom();
+              if (size > 3) {
+                style = new ol.style.Style({
+                  image: new ol.style.Circle({
+                    radius: 15,
+                    stroke: new ol.style.Stroke({
+                      color: '#27AE60',
+                    }),
+                    fill: new ol.style.Fill({
+                      color: '#27AE60',
+                    }),
+                  }),
+                  text: new ol.style.Text({
+                    text: size.toString(),
+                    fill: new ol.style.Fill({
+                      color: '#fff',
+                    }),
+                  }),
+                });
+                styleCache[size] = style;
+              }else{
+                style = iconStyle;
+              }
+              return style;
+            },
+            //style: iconStyle
+            name: 'Tree'
+          });
+          map.addLayer(TreeCad)
+        }
+       
+      } 
+    }
+  
+  }else{
+    map.getLayers().forEach(layer =>{
+      if(layer.get('name') == event){
+        map.removeLayer(layer);
+      }
+    })
+
+  }
+}
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;

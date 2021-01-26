@@ -2,12 +2,16 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-// let controllayer = [
-//   {name:"Tree", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png', description=''},
-//   {name:"Watered Trees", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'},
-//   {name:"Fruit Trees", layer="ifg:trees_data", cql_filter="", symbol = 'img/tree.png'},
-//   {name:"Oak processionary moth", layer="ifg:trees_data", cql_filter="Eichenprozessionsspinner ", symbol = 'img/tree.png'}
-// ]; 
+var controllayer = [
+  {name:"Tree", layer:"ifg:trees_data", cql_filter:"", symbol:'img/tree.png', description:'',checked:'checked'},
+  {name:"Watered Trees", layer:"ifg:trees_data", cql_filter:"watering=true", symbol:'img/tree_watered.png', description:'',checked:''},
+  {name:"Fruit Trees", layer:"ifg:trees_data", cql_filter:"fruit=true", symbol:'img/tree_fruit.png', description:'',checked:''},
+  {name:"Oak processionary", layer:"ifg:trees_data", cql_filter:"eichenprozessionsspinner=true", symbol:'img/tree_oak.png', description:'',checked:''}
+]; 
+
+for(var i=0; i < controllayer.length; i++){
+  document.getElementById("layercontrol").innerHTML += '<input type="checkbox" '+controllayer[i].checked+' id="'+controllayer[i].name+'" onclick="layerchange(id)" name="'+controllayer[i].name+'" value="'+controllayer[i].name+'"> &nbsp;<label for="'+controllayer[i].name+'">'+controllayer[i].name+'</label><br>'
+}
 
 var TreeCadSource = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
@@ -21,16 +25,17 @@ var TreeCadSource = new ol.source.Vector({
       );
     },
     strategy: ol.loadingstrategy.bbox,
-  });
+    name: 'Tree'
+});
 
-  var iconStyle = new ol.style.Style({
+var iconStyle = new ol.style.Style({
     image: new ol.style.Icon({
       anchor: [0.5, 46],
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
       src: 'img/tree.png',
     }),
-  });
+});
  
   
   var clusterSource = new ol.source.Cluster({
@@ -70,7 +75,7 @@ var TreeCadSource = new ol.source.Vector({
       return style;
     },
     //style: iconStyle
-    name: 'Trees'
+    name: 'Tree'
   });
 
   /* Map View and zoom changed */
