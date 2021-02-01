@@ -2,18 +2,452 @@
 
 var x = document.getElementById("demo");
 dragElement(document.getElementById("modal_usr"));
+dragElement(document.getElementById("tree_modal"));
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
     confirmButton: 'btn btn-success',
-    cancelButton: 'btn btn-danger'
+    cancelButton: 'btn btn-warning'
   },
   buttonsStyling: true
 })
 
+let trees_catalog = [
+  {
+    "Species": "Abies",
+    "Family": "Pine family",
+    "leave": "evergreen",
+    "roots": "deep roots ",
+    "extra": ""
+  },
+  {
+    "Species": "Ailanthus",
+    "Family": "Bitter ash family",
+    "leave": "deciduous",
+    "roots": "",
+    "extra": "toxic"
+  },
+  {
+    "Species": "Castanea",
+    "Family": "beech family",
+    "leave": "summer green",
+    "roots": "Taproots",
+    "extra": ""
+  },
+  {
+    "Species": "Acer",
+    "Family": "Horse chestnut family",
+    "leave": "mostly summer green",
+    "roots": "Heart roots with flat, far-reaching roots",
+    "extra": ""
+  },
+  {
+    "Species": "Alnus",
+    "Family": "",
+    "leave": "summer green",
+    "roots": "oot nodules",
+    "extra": ""
+  },
+  {
+    "Species": "Betula",
+    "Family": "Birch family",
+    "leave": "summer green",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Aesculus",
+    "Family": "Soap tree plants",
+    "leave": "summer green",
+    "roots": "with a wide spread",
+    "extra": ""
+  },
+  {
+    "Species": "Amelanchier",
+    "Family": "Rose plants",
+    "leave": "summer green",
+    "roots": "Deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Carpinus",
+    "Family": "Birch plants",
+    "leave": "summer green",
+    "roots": "deep heart roots",
+    "extra": ""
+  },
+  {
+    "Species": "Catalpa",
+    "Family": "Trumpet tree plant",
+    "leave": "half evergreen",
+    "roots": "leshy roots",
+    "extra": "toxic"
+  },
+  {
+    "Species": "Cedrus",
+    "Family": "Pine family",
+    "leave": "vergreen",
+    "roots": "very shallow roots",
+    "extra": ""
+  },
+  {
+    "Species": "Cercidiphyllum",
+    "Family": "Cercidiphyllaceae",
+    "leave": "",
+    "roots": "very dense roots in the upper soil area",
+    "extra": ""
+  },
+  {
+    "Species": "Cladrastris",
+    "Family": "",
+    "leave": "summergreen",
+    "roots": "fleshy root system",
+    "extra": ""
+  },
+  {
+    "Species": "Cornus",
+    "Family": "Dogwood family",
+    "leave": "evergreen",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Corylus",
+    "Family": "Betulaceae",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Crataegus",
+    "Family": "Pome fruit plants",
+    "leave": "deciduous",
+    "roots": "deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Cryptomeria",
+    "Family": "Cypress family",
+    "leave": "evergreen",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Davidia",
+    "Family": "",
+    "leave": "deciduous",
+    "roots": "deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Decaisnea",
+    "Family": "",
+    "leave": "deciduous",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Euonymus",
+    "Family": "Spindle trees",
+    "leave": "hardy",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Fagus",
+    "Family": "Beech family",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Fraxinus",
+    "Family": "Olive trees",
+    "leave": "deciduous",
+    "roots": "deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Ginkgo",
+    "Family": "",
+    "leave": "deciduous",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Gleditsia",
+    "Family": "Caesalpinioideae",
+    "leave": "deciduous",
+    "roots": "deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Ilex",
+    "Family": "Holly family",
+    "leave": "evergreen",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Juglans",
+    "Family": "Walnuts",
+    "leave": "deciduous",
+    "roots": "Deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Juniperus",
+    "Family": "Cypress family",
+    "leave": "evergreen",
+    "roots": "deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Koelreuteria",
+    "Family": "Soap tree plants",
+    "leave": "deciduous",
+    "roots": "Shallow roots ",
+    "extra": ""
+  },
+  {
+    "Species": "Laburnum",
+    "Family": "Legumes",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Larix",
+    "Family": "Pine family",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Liquidambar",
+    "Family": "Altingiaceae",
+    "leave": "deciduous",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Magnolia",
+    "Family": "Ornamental trees",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Malus",
+    "Family": "rose plants",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": "fruit"
+  },
+  {
+    "Species": "Mespilus",
+    "Family": "Rose plants",
+    "leave": "summer green",
+    "roots": "deep roots",
+    "extra": "fruit"
+  },
+  {
+    "Species": "Metasequoia",
+    "Family": "Metasequoia",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Nyssa",
+    "Family": "Dogwood-like",
+    "leave": "evergreen",
+    "roots": "eep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Parrotia",
+    "Family": "Witch Hazel Family",
+    "leave": "deciduous",
+    "roots": "Shallow roots ",
+    "extra": ""
+  },
+  {
+    "Species": "Paulownia",
+    "Family": "",
+    "leave": "evergreen",
+    "roots": "Deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Picea",
+    "Family": "Pine family",
+    "leave": "evergreen",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Pinus",
+    "Family": "Coniferous plants",
+    "leave": "evergreen",
+    "roots": "deep roots ",
+    "extra": ""
+  },
+  {
+    "Species": "Platanus",
+    "Family": "Plane trees",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Populus",
+    "Family": "Willow plants",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Prunus",
+    "Family": "Rose plants",
+    "leave": "evergreen",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Pseudotsuga",
+    "Family": "Pine family",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Pterocarya",
+    "Family": "Walnuts",
+    "leave": "deciduous",
+    "roots": "",
+    "extra": ""
+  },
+  {
+    "Species": "Pyrus",
+    "Family": "Rose plants",
+    "leave": "deciduous",
+    "roots": "deep roots",
+    "extra": "fruits"
+  },
+  {
+    "Species": "Quercus",
+    "Family": "Beech family",
+    "leave": "deciduous",
+    "roots": "Heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Robinia",
+    "Family": "Legumes",
+    "leave": "hardy",
+    "roots": "shallow to deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Salix",
+    "Family": "Willow plants",
+    "leave": "deciduous",
+    "roots": "Shallow roots ",
+    "extra": ""
+  },
+  {
+    "Species": "ambucus",
+    "Family": "Musk plants",
+    "leave": "\tdeciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Sequoiadendron",
+    "Family": "Cypress family",
+    "leave": "evergreen",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Sophora",
+    "Family": "Fabaceae",
+    "leave": "deciduous",
+    "roots": "",
+    "extra": ""
+  },
+  {
+    "Species": "Sorbus",
+    "Family": "Pome fruit plants",
+    "leave": "deciduous",
+    "roots": "Deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Taxodium",
+    "Family": "Cypress family",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Taxus",
+    "Family": "Yew family",
+    "leave": "evergreen",
+    "roots": "deep roots",
+    "extra": "toxic"
+  },
+  {
+    "Species": "Thuja",
+    "Family": "Cypress family",
+    "leave": "evergreen",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Tilia",
+    "Family": "Linden family",
+    "leave": "deciduous",
+    "roots": "heart root",
+    "extra": ""
+  },
+  {
+    "Species": "Tsuga",
+    "Family": "Pine family",
+    "leave": "evergreen",
+    "roots": "Shallow roots ",
+    "extra": ""
+  },
+  {
+    "Species": "Ulmus",
+    "Family": "Elm family",
+    "leave": "deciduous",
+    "roots": "Deep roots",
+    "extra": ""
+  },
+  {
+    "Species": "Viburnum",
+    "Family": "Musk plants",
+    "leave": "deciduous",
+    "roots": "shallow root",
+    "extra": ""
+  },
+  {
+    "Species": "Zelkova",
+    "Family": "Elm family",
+    "leave": "deciduous",
+    "roots": "Heart root",
+    "extra": ""
+  }
+ ]
 function closeModal(){
   console.log('modal_usr');
   console.log('Hola Mundo');
   document.getElementById('modal_usr').style.display = 'none';
+}
+
+function closeModalTree(){
+  document.getElementById('tree_modal').style.display = 'none';
 }
 
 function changestateWater(){
@@ -25,7 +459,7 @@ function changestateWater(){
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Yes, sure!',
-    cancelButtonText: 'No, cancel!',
+    cancelButtonText: 'No, update!',
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
@@ -48,8 +482,9 @@ function changestateWater(){
           text: 'We want to know if you have any recommendation for us. Tey are really important!'
         }
       ]).then((result) => {
-        if (result.value) {
-          const answers = JSON.stringify(result.value)
+        if (result.value != "") {
+          const answers = JSON.stringify(result.value);
+          const answers_ = result.value;
           Swal.fire({
             title: 'Thank you so much for caring about trees and being part of this project!!',
             html: `
@@ -59,10 +494,67 @@ function changestateWater(){
             confirmButtonText: 'Send'
           }).then((result)=>{
             if(result){
-              Swal.fire({
-                title: 'Action Done - Data Updated!!',
-                })
+              var today = new Date();
+              var dd = today.getDate();
+              var mm = today.getMonth()+1; 
+              var yyyy = today.getFullYear();
+              if(dd<10) 
+                  {
+                    dd='0'+dd;
+                  } 
+
+              if(mm<10) 
+                  {
+                    mm='0'+mm;
+                  } 
+              today = yyyy+'-'+mm+'-'+dd;
+              var data_ = {
+                  "properties": {
+                  "watering": true,
+                  "date_water": today
+                }
+              }
+              var person = {
+                "name": answers_[0],
+                "email": answers_[1],
+                "feedback": answers_[2],
+                "entry_date": today,
+                "tree_reference": id_t
+              }
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                body: JSON.stringify(data_),
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                },
+              });
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/userdata/',
+                type: 'POST',
+                data: JSON.stringify(person),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                }
+              });
+              
             }
+          })
+        }else{
+          Swal.fire({
+            titel:"Alert",
+            icon: 'warning',
+            text: "No data given, try again!!"
           })
         }
       })
@@ -70,11 +562,41 @@ function changestateWater(){
       /* Read more about handling dismissals below */
       result.dismiss === Swal.DismissReason.cancel
     ) {
-      Swal.fire({
-        title: 'Thank you so much for caring about trees and being part of this project!!',
-        text: 'The action was done, data updated',
-        confirmButtonText: 'close'
-      })
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; 
+        var yyyy = today.getFullYear();
+        if(dd<10) 
+            {
+              dd='0'+dd;
+            } 
+
+        if(mm<10) 
+            {
+              mm='0'+mm;
+            } 
+        today = yyyy+'-'+mm+'-'+dd;
+        console.log(today);
+        var data_ = {
+            "properties": {
+            "watering": true,
+            "date_water": today
+           }
+        }
+        console.log(id_t);
+        console.log(data_);
+        $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data_),
+        }).done(function(){
+            Swal.fire({
+              title: 'Thank you so much for caring about trees and being part of this project!!',
+              text: 'The action was done, data updated',
+              confirmButtonText: 'close'
+            })
+        });
     }
   })
 }
@@ -86,7 +608,7 @@ function changestateFruit(){
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Yes, sure!',
-    cancelButtonText: 'No, cancel!',
+    cancelButtonText: 'No, update!',
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
@@ -119,11 +641,59 @@ function changestateFruit(){
             `,
             confirmButtonText: 'Send'
           }).then((result)=>{
-            if(result){
-              Swal.fire({
-                title: 'Action Done - Data Updated!!',
-                })
-            }
+            var today = new Date();
+              var dd = today.getDate();
+              var mm = today.getMonth()+1; 
+              var yyyy = today.getFullYear();
+              if(dd<10) 
+                  {
+                    dd='0'+dd;
+                  } 
+
+              if(mm<10) 
+                  {
+                    mm='0'+mm;
+                  } 
+              today = yyyy+'-'+mm+'-'+dd;
+              var data_ = {
+                  "properties": {
+                  "watering": true,
+                  "date_water": today
+                }
+              }
+              var person = {
+                "name": answers_[0],
+                "email": answers_[1],
+                "feedback": answers_[2],
+                "entry_date": today,
+                "tree_reference": id_t
+              }
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                body: JSON.stringify(data_),
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                },
+              });
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/userdata/',
+                type: 'POST',
+                data: JSON.stringify(person),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                }
+              });
           })
         }
       })
@@ -147,7 +717,7 @@ function changestateVirus(){
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Yes, sure!',
-    cancelButtonText: 'No, cancel!',
+    cancelButtonText: 'No, update!',
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
@@ -179,6 +749,60 @@ function changestateVirus(){
               <pre><code>${answers}</code></pre>
             `,
             confirmButtonText: 'Send'
+          }).then(result=>{
+            var today = new Date();
+              var dd = today.getDate();
+              var mm = today.getMonth()+1; 
+              var yyyy = today.getFullYear();
+              if(dd<10) 
+                  {
+                    dd='0'+dd;
+                  } 
+
+              if(mm<10) 
+                  {
+                    mm='0'+mm;
+                  } 
+              today = yyyy+'-'+mm+'-'+dd;
+              var data_ = {
+                  "properties": {
+                  "watering": true,
+                  "date_water": today
+                }
+              }
+              var person = {
+                "name": answers_[0],
+                "email": answers_[1],
+                "feedback": answers_[2],
+                "entry_date": today,
+                "tree_reference": id_t
+              }
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                body: JSON.stringify(data_),
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                },
+              });
+              $.ajax({
+                url: 'http://giv-project15.uni-muenster.de:8000/userdata/',
+                type: 'POST',
+                data: JSON.stringify(person),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                  Swal.fire({
+                    icon: 'sucess',
+                    title: 'Action Done - Data Updated!!',
+                  })
+                }
+              });
           })
         }
       })
@@ -193,6 +817,44 @@ function changestateVirus(){
       })
     }
   })
+}
+
+function descriptionTrees(){
+  for(var i = 0; i < trees_catalog.length; i++){
+    if(trees_catalog[i].Species == baum){
+      document.getElementById("tree_body").innerHTML = '<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">'+
+      '<thead>'+
+          '<tr>'+
+              '<th>Item</th>'+
+              '<th>Value</th>'+
+          '</tr>'+
+      '</thead>'+
+      '<tbody>'+
+          '<tr>'+
+              '<td>Specie</td>'+
+              '<td>'+trees_catalog[i].Species+'</td>'+
+          '</tr>'+
+          '<tr>'+
+              '<td>Family:</td>'+
+              '<td>'+trees_catalog[i].Family+'</td>'+
+          '</tr>'+
+          '<tr>'+
+              '<td>Leaves</td>'+
+              '<td>'+trees_catalog[i].leave+'</td>'+
+          '</tr>'+
+          '<tr>'+
+              '<td>Roots</td>'+
+              '<td>'+trees_catalog[i].roots+'</td>'+
+          '</tr>'+
+          '<tr>'+
+              '<td>Extra information</td>'+
+              '<td>'+trees_catalog[i].extra+'</td>'+
+          '</tr>'+
+      '</tbody>'+
+      '</table>';
+    }
+  }
+  document.getElementById("tree_modal").style.display = 'block';
 }
 function getLocation() {
     if (navigator.geolocation) {

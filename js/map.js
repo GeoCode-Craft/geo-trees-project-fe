@@ -2,6 +2,9 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+let id_t;
+let baum;
+
 var controllayer = [
   {name:"Tree", layer:"ifg:trees_data", cql_filter:"", symbol:'img/tree.png', description:'',checked:'checked'},
   {name:"Watered Trees", layer:"ifg:trees_data", cql_filter:"watering=true", symbol:'img/tree_watered.png', description:'',checked:''},
@@ -97,33 +100,12 @@ var iconStyle = new ol.style.Style({
 
   map.addLayer(TreeCad);
 
-//  /*popup*/
-//   var select = new ol.interaction.Select({
-//     hitTolerance: 10,
-//     multi: true,
-//     condition: ol.events.condition.singleClick
-//   });
-//   map.addInteraction(select);
-
-//   var popup = new ol.Overlay.PopupFeature({
-//     popupClass: 'default anim',
-//     select: select,
-//     canFix: true,
-//     template: {
-//         title: 'Feature Information',
-//         attributes: // [ 'baumgruppe', 'str_schl' ]
-//         {  
-//           "str_schl": { title: 'Straßenschlüssel' },
-//           "baumgruppe": { title: 'Species' },
-//         }
-//     }
-//   });
-//   map.addOverlay (popup);
-
 map.on("singleclick", function (evt) {
   this.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     var values = feature.values_.features[0].values_
-    var baum = values.baumgruppe;
+    var id = feature.values_.features[0].id_.split('.');
+    id_t = id[1];
+    baum = values.baumgruppe;
     var str_schl = values.str_schl;
     var fruit;
     var eichenprozessionsspinner;
@@ -148,7 +130,7 @@ map.on("singleclick", function (evt) {
         '<tr>'+
             '<td>Specie</td>'+
             '<td>'+baum+'</td>'+
-            '<td>None</td>'+
+            '<td><a onclick="descriptionTrees()" class="btn btn-primary btn-icon-split"><span class="icon text-white-50"><i class="fas fa-info"></i></span><span class="text">Description</span></a></td>'+
         '</tr>'+
         '<tr>'+
             '<td>Watered:</td>'+
