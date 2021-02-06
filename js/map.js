@@ -7,7 +7,6 @@ let baum;
 let NewTreeCoordinates;
 let Fruit_Var
 let Virus_Var
-let 
 
 var controllayer = [
   {name:"Tree", layer:"ifg:trees_data", cql_filter:"", symbol:'img/tree.png', description:'',checked:'checked'},
