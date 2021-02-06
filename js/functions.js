@@ -1,5 +1,5 @@
 /**added these lines to create a button to show the geolocation of a user (did not find a way to let the extent of the card jump to the lat/lon and we need to connect the information with the right button.) */
-
+/** Initializing the variables and DragModal Action */
 var x = document.getElementById("demo");
 dragElement(document.getElementById("modal_usr"));
 dragElement(document.getElementById("tree_modal"));
@@ -10,7 +10,8 @@ const swalWithBootstrapButtons = Swal.mixin({
   },
   buttonsStyling: true
 })
-
+let AddActivated  = false;
+/** Tree Catalog With All Descriptions */
 let trees_catalog = [
   {
     "Species": "Abies",
@@ -440,19 +441,154 @@ let trees_catalog = [
     "extra": ""
   }
  ]
+
+/*Input Ratio Change Function */
+var rad = document.myForm.basemap;
+var prev = null;
+for (var i = 0; i < rad.length; i++) {
+    rad[i].addEventListener('change', function() {
+        (prev) ? console.log(prev.value): null;
+        if (this !== prev) {
+            prev = this;
+        }
+        map.getLayers().forEach(layer =>{
+          if(layer.get('name') == 'Basemap'){
+            map.removeLayer(layer);
+          }
+          var bing = new ol.layer.Tile({
+            visible: true,
+            preload: Infinity,
+            source: new ol.source.BingMaps({
+              key: 'AlG9ydwAdq1u6JL-Aynsxo7UhasIrTpJGyLjZZUsmIzIUTAM_3U375XIiqWrDL2s',
+              imagerySet: this.value,
+              // use maxZoom 19 to see stretched tiles instead of the BingMaps
+              // "no photos at this zoom level" tiles
+              // maxZoom: 19
+            }),
+            name: 'Basemap'
+          });
+          map.getLayers().insertAt(0, bing);
+        })
+    });
+}
+
+/*All Functions Needed*/
+
+/**Funtion to add new data to the Trees */
+
+function addNewTree(){
+  if(AddActivated == true){
+    document.getElementById('AddTree').style.backgroundColor = '#4e73df';
+    AddActivated  = false;
+    //document.getElementsByClassName('map').style.cursor = 'crosshair';
+  }else{
+    document.getElementById('AddTree').style.backgroundColor = '#206826';
+    AddActivated  = true;
+    //document.getElementsByClassName('map').style.cursor = 'context-menu';
+  }
+}
+
+function SaveNewTree(){
+  var urlS = 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/';
+  var coords = ol.proj.transform(NewTreeCoordinates.coordinate,'EPSG:3857','EPSG:4326');
+  var geom = {
+    "type": "Point",
+    "coordinates": [
+      coords[0],coords[1]
+    ]
+  };
+
+  var json = {
+    "geom": geom,
+    "str_schl": "",
+    "baumgruppe": document.getElementById('treeSp').value,
+    "watering": document.getElementById('watering').value,
+    "fruit": document.getElementById('Fruit').value,
+    "eichenprozessionsspinner": document.getElementById('eichenprozessionsspinner').value,
+    "date_water": null
+  }
+  console.log(JSON.stringify(json));
+  $.ajax({
+    url: urlS,
+    type: 'POST',
+    dataType: 'json',
+    contentType: 'application/json',
+    data: JSON.stringify(json),
+    success: function (data) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Action Done - Data Updated!!',
+      })
+      document.getElementById("modal_usr").style.display = 'none';
+      refreshMap();
+    },
+  });
+}
+
+/*Refresh Map */
+function refreshMap(){
+  map.getLayers().forEach(layers =>{
+    console.log(layers);
+    layers.getSource().refresh({force:true});
+  });
+}
+/* Funtion to Send reports */
+
+function SendReport(){
+  Swal.mixin({
+    input: 'text',
+    confirmButtonText: 'Next &rarr;',
+    showCancelButton: true,
+    progressSteps: ['1', '2', '3']
+  }).queue([
+    {
+      title: 'How relevant is the issue?',
+      input: 'select',
+      inputOptions: {
+          Extreme: 'Very relevance',
+          High: 'High relevance',
+          Medium: 'Medium relevance',
+          Low: 'Low relevance',
+        }
+    },
+    {
+      title: 'Is this isseu affecting you directly?',
+      input: 'select',
+      inputOptions: {
+          True: 'Yes',
+          Flase: 'No',
+        }
+    },
+    {
+      title: 'What is the issue?'
+    }
+  ]).then((result) => {
+    if (result.value) {
+      const answers = JSON.stringify(result.value)
+      Swal.fire({
+        title: 'All done!',
+        text:'The message has been sent to the local Government. They will be attending the issue as soon as possible',
+        confirmButtonText: 'Lovely!'
+      })
+    }
+  })
+}
+
+/*Close User Modal*/
 function closeModal(){
   console.log('modal_usr');
   console.log('Hola Mundo');
   document.getElementById('modal_usr').style.display = 'none';
 }
 
+/*Close User Tree Modal*/
 function closeModalTree(){
   document.getElementById('tree_modal').style.display = 'none';
 }
 
+/*Change Water and Date State*/
 function changestateWater(){
-  
-  console.log('water');
+
   swalWithBootstrapButtons.fire({
     title: 'User Data',
     text: "Do you want to share your information to recieve more information about the trees!",
@@ -544,9 +680,11 @@ function changestateWater(){
                   Swal.fire({
                     icon: 'sucess',
                     title: 'Action Done - Data Updated!!',
-                  })
+                  });
+                  refreshMap();
                 }
               });
+              
               
             }
           })
@@ -561,7 +699,7 @@ function changestateWater(){
     } else if (
       /* Read more about handling dismissals below */
       result.dismiss === Swal.DismissReason.cancel
-    ) {
+      ) {
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth()+1; 
@@ -595,12 +733,14 @@ function changestateWater(){
               title: 'Thank you so much for caring about trees and being part of this project!!',
               text: 'The action was done, data updated',
               confirmButtonText: 'close'
-            })
+            });
+            refreshMap();
         });
     }
   })
 }
 
+/*Change Fruit State*/
 function changestateFruit(){
   swalWithBootstrapButtons.fire({
     title: 'User Data',
@@ -657,8 +797,7 @@ function changestateFruit(){
               today = yyyy+'-'+mm+'-'+dd;
               var data_ = {
                   "properties": {
-                  "watering": true,
-                  "date_water": today
+                  "fruit": Fruit_Var,
                 }
               }
               var person = {
@@ -691,7 +830,8 @@ function changestateFruit(){
                   Swal.fire({
                     icon: 'sucess',
                     title: 'Action Done - Data Updated!!',
-                  })
+                  });
+                  refreshMap();
                 }
               });
           })
@@ -701,15 +841,46 @@ function changestateFruit(){
       /* Read more about handling dismissals below */
       result.dismiss === Swal.DismissReason.cancel
     ) {
-      Swal.fire({
-        title: 'Thank you so much for caring about trees and being part of this project!!',
-        text: 'The action was done, data updated',
-        confirmButtonText: 'close'
-      })
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; 
+      var yyyy = today.getFullYear();
+      if(dd<10) 
+          {
+            dd='0'+dd;
+          } 
+
+      if(mm<10) 
+          {
+            mm='0'+mm;
+          } 
+      today = yyyy+'-'+mm+'-'+dd;
+      console.log(today);
+      var data_ = {
+          "properties": {
+          "fruit": Fruit_Var,
+         }
+      }
+      console.log(id_t);
+      console.log(data_);
+      $.ajax({
+              url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+              type: 'PUT',
+              contentType: 'application/json',
+              data: JSON.stringify(data_),
+      }).done(function(){
+          Swal.fire({
+            title: 'Thank you so much for caring about trees and being part of this project!!',
+            text: 'The action was done, data updated',
+            confirmButtonText: 'close'
+          });
+          refreshMap();
+      });
     }
   })
 }
 
+/*Close Virus State*/
 function changestateVirus(){
   swalWithBootstrapButtons.fire({
     title: 'User Data',
@@ -766,8 +937,7 @@ function changestateVirus(){
               today = yyyy+'-'+mm+'-'+dd;
               var data_ = {
                   "properties": {
-                  "watering": true,
-                  "date_water": today
+                  "eichenprozessionsspinner": Virus_Var,
                 }
               }
               var person = {
@@ -800,7 +970,8 @@ function changestateVirus(){
                   Swal.fire({
                     icon: 'sucess',
                     title: 'Action Done - Data Updated!!',
-                  })
+                  });
+                  refreshMap();
                 }
               });
           })
@@ -810,15 +981,46 @@ function changestateVirus(){
       /* Read more about handling dismissals below */
       result.dismiss === Swal.DismissReason.cancel
     ) {
-      Swal.fire({
-        title: 'Thank you so much for caring about trees and being part of this project!!',
-        text: 'The action was done, data updated',
-        confirmButtonText: 'close'
-      })
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; 
+      var yyyy = today.getFullYear();
+      if(dd<10) 
+          {
+            dd='0'+dd;
+          } 
+
+      if(mm<10) 
+          {
+            mm='0'+mm;
+          } 
+      today = yyyy+'-'+mm+'-'+dd;
+      console.log(today);
+      var data_ = {
+          "properties": {
+          "eichenprozessionsspinner": Virus_Var,
+         }
+      }
+      console.log(id_t);
+      console.log(data_);
+      $.ajax({
+              url: 'http://giv-project15.uni-muenster.de:8000/muenstertreesdata/'+id_t+'/',
+              type: 'PUT',
+              contentType: 'application/json',
+              data: JSON.stringify(data_),
+      }).done(function(){
+          Swal.fire({
+            title: 'Thank you so much for caring about trees and being part of this project!!',
+            text: 'The action was done, data updated',
+            confirmButtonText: 'close'
+          });
+          refreshMap();
+      });
     }
   })
 }
 
+/*Close Activate Description Modal*/
 function descriptionTrees(){
   for(var i = 0; i < trees_catalog.length; i++){
     if(trees_catalog[i].Species == baum){
@@ -856,6 +1058,8 @@ function descriptionTrees(){
   }
   document.getElementById("tree_modal").style.display = 'block';
 }
+
+/*Get Geolocation*/
 function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
@@ -864,6 +1068,7 @@ function getLocation() {
     }
 }
 
+/*Show the Location*/
 function showPosition(position) {
   
     x.innerHTML = "Latitude: " + position.coords.latitude +
@@ -892,7 +1097,7 @@ function showPosition(position) {
           image: new ol.style.Circle({
               radius: 6,
               fill: new ol.style.Fill({
-              color: '#00b300',
+              color: '#0000FF',
               }),
               stroke: new ol.style.Stroke({
               color: '#fff',
@@ -935,6 +1140,7 @@ function showPosition(position) {
     });
 }
 
+/*Activate Control Layer Panel*/
 function ControlLayer(){
   if(document.getElementById("panelLayers").style.display == 'block'){
     document.getElementById("panelLayers").style.display = 'none';
@@ -944,7 +1150,8 @@ function ControlLayer(){
     document.getElementById("controlLayer").style.backgroundColor = '#206826';
   }
 }
-  
+
+/* add and remove possible layers */
 function layerchange(event){
   if(document.getElementById(event).checked == true){
     console.log(controllayer)
@@ -1060,6 +1267,7 @@ function layerchange(event){
   }
 }
 
+/** Activate the Daggable Option for the panels */
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (document.getElementById(elmnt.id + "header")) {

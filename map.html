@@ -33,6 +33,7 @@
 
     <!--Adding Sweet Alter-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 </head>
 
 <body id="page-top">
@@ -73,13 +74,6 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!--<li class="nav-item active">
-                <a class="nav-link" href="profile.html">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Profile</span></a>
-            </li>-->
-
         </ul>
         <!-- End of Sidebar -->
 
@@ -118,15 +112,6 @@
                                 </form>
                             </div>
                         </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <!--<li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                               <!-- <span class="badge badge-danger badge-counter">2+</span>
-                            </a> -->
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
@@ -192,9 +177,26 @@
                     </a>   
 
                    <!--Layer Control --> 
-                    <div id="panelLayers" class="col-xl-2 col-lg-5">
+                    <div id="panelLayers" class="col-lg-2 col-md-3 mb-3">
                         <div class="card shadow mb-0">
-                            <!-- Card Header - Dropdown -->
+                            <div
+                                class="card-header py-3 align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Base Maps</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div id="BaseMapLayers" class="card-body">
+                            <form name="myForm">
+                                <input type="radio" id="Aerial" name="basemap" value="Aerial">
+                                <label for="Aerial">Aerial</label><br>
+                                <input type="radio" id="AerialLabel" name="basemap" value="AerialWithLabelsOnDemand">
+                                <label for="AerialLabel">Aerial with Labels</label><br>
+                                <input type="radio" id="roadDark" name="basemap" value="CanvasDark" checked>
+                                <label for="roadDark">Road Dark</label><br>
+                                <input type="radio" id="road" name="basemap" value="RoadOnDemand">
+                                <label for="road">Road</label>
+                            </form>
+                            </div>
+                            <!-- Card Header - Layers -->
                             <div
                                 class="card-header py-3 align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">Layers</h6>
@@ -204,12 +206,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <!--Control Layer Button-->
+                    <a id="AddTree" onclick="addNewTree()" class="btn btn-primary" data-toggle="tooltip" data-placement="left" title="Add a New Tree" type="button">
+                        <i class="fas fa-map-marked"></i>
+                    </a>   
                 </div>
 
                 <!--Modal with information and options -->
-                <div id="modal_usr" class="col-xl-5 col-md-6 mb-4" >
+                <div id="modal_usr" class="col-xl-5 col-md-6 mb-4" style="padding: 1rem;">
                     <div class="card shadow mb-0">
-                        <!-- Card Header - Dropdown -->
+                        <!-- Card Header - Close -->
                         <div
                             class="card-header py-4 align-items-center justify-content-between">
                             <a onclick="closeModal()" class="btn btn-light" type="button" style="width: 100%;font-size: 10px; padding: 0%; margin: 0%;">
@@ -217,10 +224,17 @@
                             </a>  
                             <h6 class="m-0 font-weight-bold text-primary">Information</h6>                           
                         </div>
+                        <!--Report Button-->
+                        <a onclick="SendReport()" class="btn btn-danger">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                            <span class="text">Report</span>
+                        </a>
                         <!-- Card Body -->
                         <div id="usr_body" class="card-body">
-                        
                         </div>
+                        
                     </div>
                 </div>
                 <div id="tree_modal" class="col-xl-5 col-md-6 mb-4" >
@@ -228,8 +242,8 @@
                         <!-- Card Header - Dropdown -->
                         <div
                             class="card-header py-4 align-items-center justify-content-between">
-                            <a onclick="closeModalTree()" class="btn btn-light" type="button" style="width: 100%;font-size: 10px; padding: 0%; margin: 0%;">
-                                <i class="fas fa-times"></i>
+                            <a onclick="closeModalTree()" class="btn btn-warning btn-icon-split" type="button" style="width: 100%;font-size: 10px; padding: 0%; margin: 0%;">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </a>  
                             <h6 class="m-0 font-weight-bold text-primary">Description</h6>                           
                         </div>

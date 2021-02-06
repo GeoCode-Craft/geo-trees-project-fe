@@ -20,10 +20,15 @@
     right:2.5%
 }
 
+#AddTree{
+    position:absolute;
+    top:10em;
+    right:2.5%
+}
 #panelLayers{
     position: absolute;
-    top: 9em;
-    right: 2%;
+    top: 6em;
+    right: 5.5%;
     display: none;
 }
 

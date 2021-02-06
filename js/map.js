@@ -4,6 +4,10 @@ $(function () {
 
 let id_t;
 let baum;
+let NewTreeCoordinates;
+let Fruit_Var
+let Virus_Var
+let 
 
 var controllayer = [
   {name:"Tree", layer:"ifg:trees_data", cql_filter:"", symbol:'img/tree.png', description:'',checked:'checked'},
@@ -91,8 +95,21 @@ var iconStyle = new ol.style.Style({
     source: new ol.source.OSM(),
   });
 
+  var bing = new ol.layer.Tile({
+    visible: true,
+    preload: Infinity,
+    source: new ol.source.BingMaps({
+      key: 'AlG9ydwAdq1u6JL-Aynsxo7UhasIrTpJGyLjZZUsmIzIUTAM_3U375XIiqWrDL2s',
+      imagerySet: 'CanvasDark',
+      // use maxZoom 19 to see stretched tiles instead of the BingMaps
+      // "no photos at this zoom level" tiles
+      // maxZoom: 19
+    }),
+    name: 'Basemap'
+  });
+
   var map = new ol.Map({
-    layers: [ osm ],
+    layers: [ bing ],
     target: 'map',
     view: view,
     interactions: ol.interaction.defaults({ altShiftDragRotate:false, pinchRotate:false }),
@@ -101,7 +118,34 @@ var iconStyle = new ol.style.Style({
   map.addLayer(TreeCad);
 
 map.on("singleclick", function (evt) {
-  this.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+  //document.getElementById("usr_body").innerHTML = '';
+  console.log(evt);
+  if(AddActivated){
+    document.getElementById("usr_body").innerHTML ='<label for="treeSp">Tree Specie (Click Here)</label>'+
+              '<input type="text" class="form-control form-control-user"'+
+              'id="treeSp"'+
+              'placeholder="Enter the Tree Species..."></input>'+
+              '<label for="watering">Is the Tree  watered? (Click Here)</label>'+
+              '<select class="form-control" id="watering">'+
+              '<option>True</option>'+
+              '<option selected="selected">False</option>'+
+              '</select>'+
+              '<label for="Fruit">Have the Tree Fruit? (Click Here)</label>'+
+              '<select class="form-control" id="Fruit">'+
+              '<option>True</option>'+
+              '<option selected="selected">False</option>'+
+              '</select>'+
+              '<label for="eichenprozessionsspinner">Have you knowlegde if the Tree have eichenprozessionsspinner? (Click Here)</label>'+
+              '<select class="form-control" id="eichenprozessionsspinner">'+
+              '<option>True</option>'+
+              '<option selected="selected">False</option>'+
+              '</select>'+
+          '<a onclick="SaveNewTree()" style="margin-top:10px; "class="btn btn-success btn-icon-split"><span class="icon text-white-50"><i class="fas fa-seedling"></i></span><span class="text">Send Data</span></a></td>';
+    NewTreeCoordinates = evt;
+    document.getElementById("modal_usr").style.display = 'block';
+
+  }else{
+    this.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     var values = feature.values_.features[0].values_
     var id = feature.values_.features[0].id_.split('.');
     id_t = id[1];
@@ -111,12 +155,24 @@ map.on("singleclick", function (evt) {
     var eichenprozessionsspinner;
     var lastest_wat_date = values.date_water;
     var watering;
-
+    console.log(evt);
     /**From Boolean to YES and No */
-    if(values.fruit == true){fruit = 'Yes'}else{fruit = 'No'};
-    if(values.eichenprozessionsspinner == true){eichenprozessionsspinner = 'Yes'}else{eichenprozessionsspinner ='No'};
+    if(values.fruit == true){
+      fruit = 'Yes';
+      Fruit_Var = false
+    }else{
+      fruit = 'No';
+      Fruit_Var = true;
+    };
+    if(values.eichenprozessionsspinner == true){
+      eichenprozessionsspinner = 'Yes';
+      Virus_Var = false;
+    }else{
+      eichenprozessionsspinner ='No';
+      Virus_Var = true;
+    };
     if(values.watering == true){watering = 'Yes'}else{watering = 'No'};
-    if(values.lastest_wat_date == null){lastest_wat_date = 'No Date'};
+    if(values.date_water == null){lastest_wat_date = 'No Date'};
     console.log(eichenprozessionsspinner)
     document.getElementById("usr_body").innerHTML = '<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">'+
     '<thead>'+
@@ -155,7 +211,10 @@ map.on("singleclick", function (evt) {
     '</tbody>'+
     '</table>';
     document.getElementById("modal_usr").style.display = 'block';
-  });
+    });
+  }
+  
+  
 });
 
 
