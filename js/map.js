@@ -172,7 +172,10 @@ map.on("singleclick", function (evt) {
     };
     if(values.watering == true){watering = 'Yes'}else{watering = 'No'};
     if(values.date_water == null){lastest_wat_date = 'No Date'};
-    console.log(eichenprozessionsspinner)
+    console.log(eichenprozessionsspinner);
+    console.log(fruit);
+    console.log(watering);
+    console.log(watering);
     document.getElementById("usr_body").innerHTML = '<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">'+
     '<thead>'+
         '<tr>'+
